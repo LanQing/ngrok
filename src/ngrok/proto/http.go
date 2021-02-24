@@ -53,10 +53,13 @@ func NewHttp() *Http {
 	}
 }
 
-func extractBody(r io.Reader) ([]byte, io.ReadCloser, error) {
-	buf := new(bytes.Buffer)
-	_, err := buf.ReadFrom(r)
-	return buf.Bytes(), ioutil.NopCloser(buf), err
+func extractBody(r io.ReadCloser) ([]byte, io.ReadCloser, error) { 
+	buf := new(bytes.Buffer) 
+	// bug
+	// buf.ReadFrom(r)
+	defer r.Close()
+	// return buf.Bytes(), ioutil.NopCloser(buf), err
+	return buf.Bytes(), nil, nil
 }
 
 func (h *Http) GetName() string { return "http" }
